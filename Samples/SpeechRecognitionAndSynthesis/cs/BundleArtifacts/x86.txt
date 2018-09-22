@@ -1,0 +1,2 @@
+MainPackage=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\bin\x86\Release\SpeechAndTTS_1.0.0.0_x86.appx
+SymbolPackage=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\AppPackages\SpeechAndTTS_1.0.0.0_Test\SpeechAndTTS_1.0.0.0_x86.appxsym

@@ -1,0 +1,13 @@
+MainPackage=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\bin\x64\Release\SpeechAndTTS_1.0.0.0_x64.appx
+SymbolPackage=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\AppPackages\SpeechAndTTS_1.0.0.0_Test\SpeechAndTTS_1.0.0.0_x64.appxsym
+ResourcePack=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\bin\x64\Release\SpeechAndTTS_1.0.0.0_language-de.appx
+ResourcePack=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\bin\x64\Release\SpeechAndTTS_1.0.0.0_language-es.appx
+ResourcePack=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\bin\x64\Release\SpeechAndTTS_1.0.0.0_language-fr.appx
+ResourcePack=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\bin\x64\Release\SpeechAndTTS_1.0.0.0_language-it.appx
+ResourcePack=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\bin\x64\Release\SpeechAndTTS_1.0.0.0_language-ja.appx
+ResourcePack=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\bin\x64\Release\SpeechAndTTS_1.0.0.0_language-ko.appx
+ResourcePack=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\bin\x64\Release\SpeechAndTTS_1.0.0.0_language-pl.appx
+ResourcePack=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\bin\x64\Release\SpeechAndTTS_1.0.0.0_language-pt.appx
+ResourcePack=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\bin\x64\Release\SpeechAndTTS_1.0.0.0_language-ru.appx
+ResourcePack=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\bin\x64\Release\SpeechAndTTS_1.0.0.0_language-zh-hans.appx
+ResourcePack=C:\Users\jdool\Source\Repos\Windows-universal-samples\Samples\SpeechRecognitionAndSynthesis\cs\bin\x64\Release\SpeechAndTTS_1.0.0.0_language-zh-hant.appx
