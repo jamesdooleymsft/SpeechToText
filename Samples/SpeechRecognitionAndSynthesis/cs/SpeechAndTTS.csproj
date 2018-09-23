@@ -105,6 +105,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AudioCapturePermissions.cs" />
+    <Compile Include="AzureSubscriptonInfo.cs" />
     <Compile Include="Scenario_ContinuousDictation.xaml.cs">
       <DependentUpon>Scenario_ContinuousDictation.xaml</DependentUpon>
     </Compile>

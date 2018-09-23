@@ -24,6 +24,7 @@ using Windows.UI.Xaml.Documents;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.CognitiveServices.Speech;
+using SpeechAndTTS;
 
 namespace SDKTemplate
 {
@@ -88,9 +89,6 @@ namespace SDKTemplate
                 btnContinuousRecognize.IsEnabled = false;
                 cbLanguageSelection.IsEnabled = false;
             }
-
-            var factory = SpeechFactory.FromSubscription("YourSubscriptionKey", "westus");
-
         }
 
         /// <summary>
@@ -436,12 +434,11 @@ namespace SDKTemplate
         public async void AzureRecognize_Click(object sender, RoutedEventArgs e)
         {
             btnAzureRecognize.IsEnabled = false;
-            // Creates an instance of a speech factory with specified subscription key and service region.
-            // Replace with your own subscription key and service region (e.g., "westus").
-            var factory = SpeechFactory.FromSubscription("subscriptionkey", "westus");
+
             try
             {
                 // Creates a speech recognizer using microphone as audio input. The default language is "en-us".
+                var factory = SpeechFactory.FromSubscription(AzureSubscriptonInfo.SpeechServicesKey, AzureSubscriptonInfo.SpeechServicesRegion);
                 azureRecognizer = factory.CreateSpeechRecognizer();
 
                 azureRecognizer.OnSpeechDetectedEvent += async (s, recognitionEvent) =>
