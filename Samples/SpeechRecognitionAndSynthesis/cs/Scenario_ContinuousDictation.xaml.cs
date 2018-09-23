@@ -23,6 +23,7 @@ using Windows.Globalization;
 using Windows.UI.Xaml.Documents;
 using System.Threading.Tasks;
 using System.Threading;
+using Microsoft.CognitiveServices.Speech;
 
 namespace SDKTemplate
 {
@@ -32,7 +33,7 @@ namespace SDKTemplate
         private MainPage rootPage;
 
         // The speech recognizer used throughout this sample.
-        private SpeechRecognizer speechRecognizer;
+        private Windows.Media.SpeechRecognition.SpeechRecognizer speechRecognizer;
 
         // Keep track of whether the continuous recognizer is currently running, so it can be cleaned up appropriately.
         private bool isListening;
@@ -75,7 +76,7 @@ namespace SDKTemplate
                 btnContinuousRecognize.IsEnabled = true;
 
                 PopulateLanguageDropdown();
-                await InitializeRecognizer(SpeechRecognizer.SystemSpeechLanguage);
+                await InitializeRecognizer(Windows.Media.SpeechRecognition.SpeechRecognizer.SystemSpeechLanguage);
             }
             else
             {
@@ -83,6 +84,8 @@ namespace SDKTemplate
                 btnContinuousRecognize.IsEnabled = false;
                 cbLanguageSelection.IsEnabled = false;
             }
+
+            var factory = SpeechFactory.FromSubscription("YourSubscriptionKey", "westus");
 
         }
 
@@ -92,8 +95,8 @@ namespace SDKTemplate
         /// </summary>
         private void PopulateLanguageDropdown()
         {
-            Language defaultLanguage = SpeechRecognizer.SystemSpeechLanguage;
-            IEnumerable<Language> supportedLanguages = SpeechRecognizer.SupportedTopicLanguages;
+            Language defaultLanguage = Windows.Media.SpeechRecognition.SpeechRecognizer.SystemSpeechLanguage;
+            IEnumerable<Language> supportedLanguages = Windows.Media.SpeechRecognition.SpeechRecognizer.SupportedTopicLanguages;
             foreach (Language lang in supportedLanguages)
             {
                 ComboBoxItem item = new ComboBoxItem();
@@ -157,7 +160,7 @@ namespace SDKTemplate
                 this.speechRecognizer = null;
             }
 
-            this.speechRecognizer = new SpeechRecognizer(recognizerLanguage);
+            this.speechRecognizer = new Windows.Media.SpeechRecognition.SpeechRecognizer(recognizerLanguage);
 
             // Provide feedback to the user about the state of the recognizer. This can be used to provide visual feedback in the form
             // of an audio indicator to help the user understand whether they're being heard.
@@ -183,7 +186,7 @@ namespace SDKTemplate
         }
 
 
-        private async void SpeechRecognizer_RecognitionQualityDegrading(SpeechRecognizer sender, SpeechRecognitionQualityDegradingEventArgs args)
+        private async void SpeechRecognizer_RecognitionQualityDegrading(Windows.Media.SpeechRecognition.SpeechRecognizer sender, SpeechRecognitionQualityDegradingEventArgs args)
         {
             // In some scenarios, a developer may choose to ignore giving the user feedback in this case, if speech
             // is not the primary input mechanism for the application.
@@ -275,7 +278,7 @@ namespace SDKTemplate
         /// </summary>
         /// <param name="sender">The recognizer that has generated the hypothesis</param>
         /// <param name="args">The hypothesis formed</param>
-        private async void SpeechRecognizer_HypothesisGenerated(SpeechRecognizer sender, SpeechRecognitionHypothesisGeneratedEventArgs args)
+        private async void SpeechRecognizer_HypothesisGenerated(Windows.Media.SpeechRecognition.SpeechRecognizer sender, SpeechRecognitionHypothesisGeneratedEventArgs args)
         {
             string hypothesis = args.Hypothesis.Text;
 
@@ -342,7 +345,7 @@ namespace SDKTemplate
         /// </summary>
         /// <param name="sender">The recognizer that is currently running.</param>
         /// <param name="args">The current state of the recognizer.</param>
-        private async void SpeechRecognizer_StateChanged(SpeechRecognizer sender, SpeechRecognizerStateChangedEventArgs args)
+        private async void SpeechRecognizer_StateChanged(Windows.Media.SpeechRecognition.SpeechRecognizer sender, SpeechRecognizerStateChangedEventArgs args)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
                 rootPage.NotifyUser(args.State.ToString(), NotifyType.StatusMessage);
