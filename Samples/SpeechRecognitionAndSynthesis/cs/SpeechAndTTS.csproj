@@ -21,7 +21,7 @@
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>739D69CA9928AB1E415A26D92EF2A490B28860E9</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>61947FD1954833BA1781439D84F75B722D472DDC</PackageCertificateThumbprint>
     <PackageCertificateKeyFile>SpeechAndTTS_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
