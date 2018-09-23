@@ -35,6 +35,9 @@ namespace SDKTemplate
         // The speech recognizer used throughout this sample.
         private Windows.Media.SpeechRecognition.SpeechRecognizer speechRecognizer;
 
+        // The Azure speech recognizer
+        private Microsoft.CognitiveServices.Speech.SpeechRecognizer azureRecognizer;
+
         // Keep track of whether the continuous recognizer is currently running, so it can be cleaned up appropriately.
         private bool isListening;
 
@@ -74,6 +77,7 @@ namespace SDKTemplate
             if (permissionGained)
             {
                 btnContinuousRecognize.IsEnabled = true;
+                btnAzureRecognize.IsEnabled = true;
 
                 PopulateLanguageDropdown();
                 await InitializeRecognizer(Windows.Media.SpeechRecognition.SpeechRecognizer.SystemSpeechLanguage);
@@ -291,6 +295,24 @@ namespace SDKTemplate
             });
         }
 
+        private async void AppendTextToDictationOutput(String text)
+        {
+            dictatedTextBuilder.Append(text + " ");
+
+            if (dictatedTextBuilder.Length > 500)
+            {
+                dictatedTextBuilder.Remove(0, 50);
+            }
+
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                //discardedTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+
+                dictationTextBox.Text = dictatedTextBuilder.ToString();
+                btnClearText.IsEnabled = true;
+            });
+        }
+
         /// <summary>
         /// Handle events fired when a result is generated. Check for high to medium confidence, and then append the
         /// string to the end of the stringbuffer, and replace the content of the textbox with the string buffer, to
@@ -298,27 +320,14 @@ namespace SDKTemplate
         /// </summary>
         /// <param name="sender">The Recognition session that generated this result</param>
         /// <param name="args">Details about the recognized speech</param>
-        private async void ContinuousRecognitionSession_ResultGenerated(SpeechContinuousRecognitionSession sender, SpeechContinuousRecognitionResultGeneratedEventArgs args)
+        private void ContinuousRecognitionSession_ResultGenerated(SpeechContinuousRecognitionSession sender, SpeechContinuousRecognitionResultGeneratedEventArgs args)
         {
             // We may choose to discard content that has low confidence, as that could indicate that we're picking up
             // noise via the microphone, or someone could be talking out of earshot.
             //if (args.Result.Confidence == SpeechRecognitionConfidence.Medium ||
             //    args.Result.Confidence == SpeechRecognitionConfidence.High)
             {
-                dictatedTextBuilder.Append(args.Result.Text + " ");
-
-                if (dictatedTextBuilder.Length > 500)
-                {
-                    dictatedTextBuilder.Remove(0, 50);
-                }
-
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-                    //discardedTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-
-                    dictationTextBox.Text = dictatedTextBuilder.ToString();
-                    btnClearText.IsEnabled = true;
-                });
+                AppendTextToDictationOutput(args.Result.Text);
             }
             //else
             //{
@@ -422,6 +431,72 @@ namespace SDKTemplate
                 }
             }
             btnContinuousRecognize.IsEnabled = true;
+        }
+
+        public async void AzureRecognize_Click(object sender, RoutedEventArgs e)
+        {
+            btnAzureRecognize.IsEnabled = false;
+            // Creates an instance of a speech factory with specified subscription key and service region.
+            // Replace with your own subscription key and service region (e.g., "westus").
+            var factory = SpeechFactory.FromSubscription("subscriptionkey", "westus");
+            try
+            {
+                // Creates a speech recognizer using microphone as audio input. The default language is "en-us".
+                azureRecognizer = factory.CreateSpeechRecognizer();
+
+                azureRecognizer.OnSpeechDetectedEvent += async (s, recognitionEvent) =>
+                {
+                    String output = $"Recognition event. Event: {recognitionEvent.EventType.ToString()}.\n";
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                        rootPage.NotifyUser(output, NotifyType.StatusMessage);
+                    });
+                };
+
+                azureRecognizer.IntermediateResultReceived += async (s, speechRecognitionResult) => {
+                    string hypothesis = speechRecognitionResult.Result.Text;
+
+                    // Update the textbox with the currently confirmed text, and the hypothesis combined.
+                    string textboxContent = dictatedTextBuilder.ToString() + " ??? " + hypothesis + " ...";
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        dictationTextBox.Text = textboxContent;
+                        btnClearText.IsEnabled = true;
+                    });
+                };
+
+                azureRecognizer.FinalResultReceived += (s, speechRecognitionResult) => {
+                    if (speechRecognitionResult.Result.RecognitionStatus == RecognitionStatus.Recognized)
+                    {
+                        AppendTextToDictationOutput(speechRecognitionResult.Result.Text);
+                    }
+                };
+
+                azureRecognizer.RecognitionErrorRaised += async (s, recognitionErrorRaised) => {
+                    String output = $"An error occurred. Status: {recognitionErrorRaised.Status.ToString()}, FailureReason: {recognitionErrorRaised.FailureReason}\n";
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                        rootPage.NotifyUser(output, NotifyType.ErrorMessage);
+                    });
+                };
+
+                azureRecognizer.OnSessionEvent += async (s, sessionEvent) => {
+                    String output = $"Session event. Event: {sessionEvent.EventType.ToString()}.\n";
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                        rootPage.NotifyUser(output, NotifyType.StatusMessage);
+                    });
+                };
+
+                await azureRecognizer.StartContinuousRecognitionAsync().ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                var messageDialog = new Windows.UI.Popups.MessageDialog(exception.Message, "Exception");
+                await messageDialog.ShowAsync();
+            }
+
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                btnAzureRecognize.IsEnabled = true;
+            });
         }
 
         /// <summary>
